@@ -1,12 +1,20 @@
-[![Build Status](https://secure.travis-ci.org/jadb/cakephp-monolog.png?branch=master)](http://travis-ci.org/jadb/cakephp-monolog)
-
 # CakePHP Monolog Plugin
+
+[![GitHub License](https://img.shields.io/github/license/pieceofcake2/monolog?label=License)](LICENSE)
+[![Packagist Version](https://img.shields.io/packagist/v/pieceofcake2/monolog?label=Packagist)](https://packagist.org/packages/pieceofcake2/monolog)
+![PHP](https://img.shields.io/packagist/dependency-v/pieceofcake2/monolog/php?logo=php&logoColor=%23FFFFFF&label=PHP&labelColor=%23777BB4&color=%23FFFFFF)
+![CakePHP](https://img.shields.io/packagist/dependency-v/pieceofcake2/monolog/pieceofcake2/cakephp?logo=cakephp&logoColor=%23FFFFFF&label=CakePHP&labelColor=%23D33C43&color=%23FFFFFF)
+[![CI](https://img.shields.io/github/actions/workflow/status/pieceofcake2/monolog/CI.yml?label=CI)](https://github.com/pieceofcake2/monolog/actions/workflows/CI.yml)
+[![Codecov](https://img.shields.io/codecov/c/gh/pieceofcake2/monolog?label=Coverage)](https://codecov.io/gh/pieceofcake2/monolog)
+
+__This is forked for CakePHP2.__
 
 Despite the very advanced logging system offered in [CakePHP][1], I still would have had to write
 a lot more code to be able to handle logs the way I needed. To write the least code possible, I
 chose to go with the popular monolog library.
 
-> __NOTE__ The package name changed to jadb/cakephp-monolog, to not violate the cakephp namespace.
+> [!NOTE]
+> The package name changed to jadb/cakephp-monolog, to not violate the cakephp namespace.
 
 ## Install
 
@@ -14,17 +22,9 @@ Because [monolog][2] is a [composer][3] [package][4] and to avoid having to manu
 includes (vs. auto-loading), I decided to release this also as a composer package and take advantage
 of the auto-loading magic.
 
-First, add this plugin as a requirement to your `composer.json`:
-
-	{
-		"require": {
-			"cakephp/monolog": "*"
-		}
-	}
-
-And then update:
-
-	php composer.phar update
+```bash
+composer require pieceofcake2/monolog
+```
 
 That's it! You should now be ready to start configuring your channels.
 
@@ -33,28 +33,28 @@ That's it! You should now be ready to start configuring your channels.
 Start by creating a logging configuration file (i.e. `app/Config/log.php`) that you will include early
 in your `app/Config/bootstrap.php`:
 
-```
-include 'log.php';
+```php
+require_once CONFIG . 'log.php';
 ```
 
 A basic configuration, to replicate what Cake does but using Monolog (to give you a good starting
 example), would look something like this:
 
-```
+```php
 CakePlugin::load('Monolog');
 
-CakeLog::config('debug', array(
-	'engine' => 'Monolog.Monolog',
-	'channel' => 'app',
-	'handlers' => array(
-		'Stream' => array(
-			LOGS . 'debug.log',
-			'formatters' => array(
-				'Line' => array("%datetime% %channel% %level_name%: %message%\n")
-			)
-		)
-	)
-));
+CakeLog::config('debug', [
+    'engine' => 'Monolog.Monolog',
+    'channel' => 'app',
+    'handlers' => [
+        'Stream' => [
+            LOGS . 'debug.log',
+            'formatters' => [
+                'Line' => ["%datetime% %channel% %level_name%: %message%\n"],
+            ],
+        ],
+    ],
+]);
 ```
 
 Note that with CakePHP versions < 2.4 the engine name should instead be `Monolog.MonologLog`.
@@ -68,33 +68,33 @@ The example below shows how to setup:
 * normal log file with much more details about the request
 * email notifications for critical and alert levels including only the error message
 
-```
-CakeLog::config('logstash', array(
-	'engine' => 'Monolog.Monolog',
-	'channel' => 'app',
-	'handlers' => array(
-		'RotatingFile' => array(
-			LOGS . 'logstash.log',
-			30,
-			'formatters' => array(
-				'Logstash' => array('web', env('SERVER_ADDR'))
-			),
-			'processors' => array('MemoryPeakUsage')
-		),
-		'Stream' => array(
-			LOGS . 'logstash.log',
-			'formatters' => array(
-				'Line' => array("%datetime% %channel% %level_name%: %message% %context% %extra%\n")
-			),
-			'processors' => array('MemoryUsage', 'Web')
-		),
-		'CakeEmail' => array(
-			'admin@domain.com',
-			'ALERT: APPLICATION REQUIRES IMMEDIATE ATTENTION.',
-			'default'
-		)
-	)
-));
+```php
+CakeLog::config('logstash', [
+    'engine' => 'Monolog.Monolog',
+    'channel' => 'app',
+    'handlers' => [
+        'RotatingFile' => [
+            LOGS . 'logstash.log',
+            30,
+            'formatters' => [
+                'Logstash' => ['web', env('SERVER_ADDR')]
+            ],
+            'processors' => ['MemoryPeakUsage'],
+        ],
+        'Stream' => [
+            LOGS . 'logstash.log',
+            'formatters' => [
+                'Line' => ["%datetime% %channel% %level_name%: %message% %context% %extra%\n"]
+            ],
+            'processors' => ['MemoryUsage', 'Web'],
+        ],
+        'CakeEmail' => [
+            'admin@domain.com',
+            'ALERT: APPLICATION REQUIRES IMMEDIATE ATTENTION.',
+            'default',
+        ],
+    ],
+]);
 ```
 
 The [`CakeEmailHandler`][7] was [just submitted][8] to the main [monolog][2] repo today. If it is not

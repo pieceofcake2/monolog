@@ -1,83 +1,86 @@
 <?php
 App::uses('MonologLog', 'Monolog.Log/Engine');
 
-use Monolog\Logger;
+class MonologLogTest extends CakeTestCase
+{
+    public $logs = null;
 
-class MonologLogTest extends CakeTestCase {
+    public function setUp(): void
+    {
+        $this->logs = LOGS;
+        $this->rotate = sprintf('rotate-%s-%s-%s', date('Y'), date('m'), date('d'));
+        $this->tearDown();
+    }
 
-	public $logs = null;
+    public function tearDown(): void
+    {
+        $files = [
+            'error',
+            'monolog',
+            $this->rotate,
+        ];
+        foreach ($files as $file) {
+            if (file_exists($this->logs . $file . '.log')) {
+                unlink($this->logs . $file . '.log');
+            }
+        }
+    }
 
-	public function setUp() {
-		$this->logs = LOGS;
-		$this->rotate = sprintf('rotate-%s-%s-%s', date('Y'), date('m'), date('d'));
-		$this->tearDown();
-	}
+    public function testWritingWithDefaultHandler(): void
+    {
+        $filename = $this->logs . 'monolog.log';
+        $log = new MonologLog();
+        $log->write('warning', 'Test warning');
+        $this->assertTrue(file_exists($filename));
 
-	public function tearDown() {
-		$files = array(
-			'error',
-			'monolog',
-			$this->rotate
-		);
-		foreach ($files as $file) {
-			if (file_exists($this->logs . $file . '.log')) {
-				unlink($this->logs . $file . '.log');
-			}
-		}
-	}
+        $result = file_get_contents($filename);
+        $this->assertMatchesRegularExpression('/^\[2[0-9]{3}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+[+-][0-9]{2}:[0-9]{2}\] monolog\.WARNING: Test warning \[\] \[\]/', $result);
+    }
 
-	public function testWritingWithDefaultHandler() {
-		$filename = $this->logs . 'monolog.log';
-		$log = new MonologLog();
-		$log->write('warning', 'Test warning');
-		$this->assertTrue(file_exists($filename));
+    public function testWritingWithCustomHandlers(): void
+    {
+        $options = [
+            'channel' => 'database',
+            'handlers' => [
+                'Stream' => [$this->logs . 'error.log'],
+                'RotatingFile' => [$this->logs . 'rotate.log', 0, 400, false],
+            ],
+            'processors' => ['Web'],
+        ];
 
-		$result = file_get_contents($filename);
-		$this->assertRegExp('/^\[2[0-9]{3}-[0-9]+-[0-9]+ [0-9]+:[0-9]+:[0-9]+\] monolog\.WARNING: Test warning \[\] \[\]/', $result);
-	}
+        $log = new MonologLog($options);
 
-	public function testWritingWithCustomHandlers() {
-		$options = array(
-			'channel' => 'database',
-			'handlers' => array(
-				'Stream' => array($this->logs . 'error.log'),
-				'RotatingFile' => array($this->logs . 'rotate.log', 0, 400, false),
-			),
-			'processors' => array('Web')
-		);
+        $log->write('warning', 'Test warning');
+        $this->assertTrue(file_exists($this->logs . 'error.log'));
+        $this->assertFalse(file_exists($this->logs . $this->rotate . '.log'));
 
-		$log = new MonologLog($options);
+        $this->tearDown();
 
-		$log->write('warning', 'Test warning');
-		$this->assertTrue(file_exists($this->logs . 'error.log'));
-		$this->assertFalse(file_exists($this->logs . $this->rotate . '.log'));
+        $log->write('critical', 'Test critical');
+        $this->assertFalse(file_exists($this->logs . 'error.log'));
+        $this->assertTrue(file_exists($this->logs . $this->rotate . '.log'));
+    }
 
-		$this->tearDown();
+    public function testWritingWithSimilarConfigThanCake(): void
+    {
+        $options = [
+            'channel' => 'app',
+            'handlers' => [
+                'Stream' => [
+                    $this->logs . 'error.log',
+                    'formatters' => [
+                        'Line' => ["%datetime% %level_name%: %message%\n"],
+                    ],
+                ],
+            ],
+        ];
 
-		$log->write('critical', 'Test critical');
-		$this->assertFalse(file_exists($this->logs . 'error.log'));
-		$this->assertTrue(file_exists($this->logs . $this->rotate . '.log'));
-	}
+        $log = new MonologLog($options);
 
-	public function testWritingWithSimilarConfigThanCake() {
-		$options = array(
-			'channel' => 'app',
-			'handlers' => array(
-				'Stream' => array(
-					$this->logs . 'error.log',
-					'formatters' => array(
-						'Line' => array("%datetime% %level_name%: %message%\n")
-					)
-				)
-			)
-		);
+        $log->write('warning', 'Test warning');
+        $this->assertTrue(file_exists($this->logs . 'error.log'));
 
-		$log = new MonologLog($options);
-
-		$log->write('warning', 'Test warning');
-		$this->assertTrue(file_exists($this->logs . 'error.log'));
-
-		$result = file_get_contents($this->logs . 'error.log');
-		$this->assertRegExp('/^2[0-9]{3}-[0-9]+-[0-9]+ [0-9]+:[0-9]+:[0-9]+ WARNING: Test warning/', $result);
-	}
+        $result = file_get_contents($this->logs . 'error.log');
+        $this->assertMatchesRegularExpression('/^2[0-9]{3}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+[+-][0-9]{2}:[0-9]{2} WARNING: Test warning/', $result);
+    }
 }
