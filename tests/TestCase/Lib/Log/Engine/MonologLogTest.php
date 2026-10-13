@@ -5,6 +5,8 @@ class MonologLogTest extends CakeTestCase
 {
     public $logs = null;
 
+    public $rotate = null;
+
     public function setUp(): void
     {
         $this->logs = LOGS;
