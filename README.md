@@ -16,6 +16,11 @@ chose to go with the popular monolog library.
 > [!NOTE]
 > The package name changed to jadb/cakephp-monolog, to not violate the cakephp namespace.
 
+## Requirements
+
+* CakePHP 2.12+
+* PHP 8.0+
+
 ## Install
 
 Because [monolog][2] is a [composer][3] [package][4] and to avoid having to manually write a lot of
