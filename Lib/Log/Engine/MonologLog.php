@@ -11,6 +11,13 @@ use Monolog\Processor\ProcessorInterface;
 
 class MonologLog extends BaseLog
 {
+    /**
+     * Monolog logger instance.
+     *
+     * @var Logger
+     */
+    public $log;
+
     public $defaults = [
         'channel' => 'monolog',
         'handlers' => [],
@@ -29,9 +36,10 @@ class MonologLog extends BaseLog
             throw new Exception('Missing the monolog/monolog composer package.');
         }
 
-        $this->log = new Logger($this->_config['channel']);
-        $this->__push($this->log, $this->_config['handlers']);
-        $this->__push($this->log, $this->_config['processors'], 'Processor');
+        $config = $this->config();
+        $this->log = new Logger($config['channel']);
+        $this->__push($this->log, $config['handlers']);
+        $this->__push($this->log, $config['processors'], 'Processor');
     }
 
     /**
@@ -133,10 +141,11 @@ class MonologLog extends BaseLog
             unset($params['search']);
         }
 
+        $extraParams = [];
         if ($type === 'Handler') {
             foreach ($extras as $k) {
                 if (isset($params[$k])) {
-                    ${$k} = $params[$k];
+                    $extraParams[$k] = $params[$k];
                     unset($params[$k]);
                 }
             }
@@ -155,8 +164,8 @@ class MonologLog extends BaseLog
         $object->$method($_class);
 
         foreach ($extras as $k) {
-            if (!empty(${$k})) {
-                $this->__push($_class, (array)${$k}, ucfirst(substr($k, 0, strlen($k) - 1)));
+            if (!empty($extraParams[$k])) {
+                $this->__push($_class, (array)$extraParams[$k], ucfirst(substr($k, 0, strlen($k) - 1)));
             }
         }
     }

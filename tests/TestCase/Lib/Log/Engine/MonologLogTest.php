@@ -85,4 +85,28 @@ class MonologLogTest extends CakeTestCase
         $result = file_get_contents($this->logs . 'error.log');
         $this->assertMatchesRegularExpression('/^2[0-9]{3}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+[+-][0-9]{2}:[0-9]{2} WARNING: Test warning/', $result);
     }
+
+    public function testWritingWithHandlerProcessors(): void
+    {
+        $options = [
+            'channel' => 'app',
+            'handlers' => [
+                'Stream' => [
+                    $this->logs . 'error.log',
+                    'formatters' => [
+                        'Line' => ["%level_name%: %message% %extra%\n"],
+                    ],
+                    'processors' => ['MemoryUsage'],
+                ],
+            ],
+        ];
+
+        $log = new MonologLog($options);
+
+        $log->write('warning', 'Test warning');
+        $this->assertTrue(file_exists($this->logs . 'error.log'));
+
+        $result = file_get_contents($this->logs . 'error.log');
+        $this->assertMatchesRegularExpression('/^WARNING: Test warning \{"memory_usage":"[0-9.]+ [A-Z]?B"\}/', $result);
+    }
 }

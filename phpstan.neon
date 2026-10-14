@@ -1,0 +1,12 @@
+includes:
+    - vendor/pieceofcake2/phpstan-cakephp2/extension.neon
+
+parameters:
+    level: 5
+    # Monolog 3 (installed on PHP >= 8.1) declares enums, which PHPStan
+    # cannot parse when targeting PHP 8.0.
+    phpVersion: 80100
+    paths:
+        - Lib
+    bootstrapFiles:
+        - tests/bootstrap.php
