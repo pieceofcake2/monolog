@@ -31,7 +31,7 @@ class CakeEmailHandler extends MailHandler
     /**
      * @param array|string $to The receiver of the mail
      * @param string $subject The subject of the mail
-     * @param string $from The CakeEmail configuration to use
+     * @param string $config The CakeEmail configuration to use
      * @param Level|string|int $level The minimum logging level at which this handler will be triggered
      * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
      */
