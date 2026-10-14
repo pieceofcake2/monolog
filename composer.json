@@ -1,6 +1,6 @@
 {
     "name": "pieceofcake2/monolog",
-    "description": "CakePHP 2 Monolog Plugin",
+    "description": "CakePHP 2 log engine for Monolog handlers, formatters and processors",
     "type": "cakephp-plugin",
     "keywords": ["cakephp", "cakephp2", "monolog"],
     "license": "MIT",
