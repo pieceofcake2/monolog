@@ -14,6 +14,13 @@ Monolog handler that sends log messages by email with `CakeEmail`. This is a for
 [jadb/cakephp-monolog](https://github.com/jadb/cakephp-monolog) for
 [pieceofcake2/cakephp](https://github.com/pieceofcake2/cakephp).
 
+## Documentation
+
+- Website: https://pieceofcake2.github.io/monolog/
+- Markdown: [docs/README.md](docs/README.md) (for AI tools and offline reading)
+
+The Markdown documentation is also included in the Composer package, in the plugin's directory: `plugins/Monolog/docs/README.md` (the location depends on your `installer-paths`). Install the package with `--dev` if you only need it for development.
+
 ## Requirements
 
 * PHP 8.0+
@@ -25,10 +32,6 @@ Monolog handler that sends log messages by email with `CakeEmail`. This is a for
 ```
 composer require pieceofcake2/monolog
 ```
-
-## Documentation
-
-See the [documentation](https://pieceofcake2.github.io/monolog/).
 
 ## Contributing
 
