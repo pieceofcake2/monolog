@@ -22,7 +22,7 @@ Monolog handler that sends log messages by email with `CakeEmail`. This is a for
 
 ## Installation
 
-```
+```bash
 composer require pieceofcake2/monolog
 ```
 
