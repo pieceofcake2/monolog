@@ -133,3 +133,11 @@ than `CakeEmail`, set `Email.classname`:
 ```php
 Configure::write('Email.classname', 'MyEmail');
 ```
+
+## Origin
+
+This package is a maintained fork of [jadb/cakephp-monolog](https://github.com/jadb/cakephp-monolog)
+(`jadb/cakephp-monolog` on Packagist, last upstream version 2.0.0), originally by Jad Bitar. It is
+maintained for CakePHP 2 on modern PHP by [pieceofcake2](https://github.com/pieceofcake2). Changes
+from the original are listed in the
+[commit history since the fork](https://github.com/pieceofcake2/monolog/compare/73bfc43...2.x).
