@@ -16,7 +16,7 @@ CakePHP には高度なロギングの仕組みがありますが、ほかの方
 
 ## インストール
 
-[Composer](https://getcomposer.org/) でプラグインをインストールします:
+[Composer](https://getcomposer.org/) でプラグインをインストールします。
 
 ```bash
 composer require pieceofcake2/monolog
@@ -26,7 +26,7 @@ composer require pieceofcake2/monolog
 
 このプラグインは `cakephp-plugin` タイプなので、`composer/installers` によってプラグインのディレクトリに
 (`Monolog` として) インストールされます。正しい場所にインストールされるように、アプリケーションの
-`composer.json` で `installer-paths` を設定してください:
+`composer.json` で `installer-paths` を設定してください。
 
 | 構成 | `installer-paths` |
 | --- | --- |
@@ -83,7 +83,7 @@ CakeLog::config('debug', [
 [CakePHP のロギング](https://pieceofcake2.github.io/docs/ja/core-libraries/logging.html) の仕組みから
 わざわざ移行する意味がありません。
 
-次の例では、以下を設定します:
+次の例では、以下を設定します。
 
 * 30 日間保持され、[Logstash](https://www.elastic.co/logstash) で読める、メモリ使用量のピークの情報付きの
   ローテーションするログ
@@ -134,7 +134,7 @@ CakeLog::config('logstash', [
 5. メッセージをスタックの上位に伝播させるかどうか (デフォルトは `true`)
 
 これは Monolog の一部ではないので、上の例のように、ハンドラー名に完全なクラス名を使い、`search` にクラスの
-ディレクトリを設定してください。`CakeEmail` 以外のクラスでメールを送信するには、`Email.classname` を設定します:
+ディレクトリを設定してください。`CakeEmail` 以外のクラスでメールを送信するには、`Email.classname` を設定します。
 
 ```php
 Configure::write('Email.classname', 'MyEmail');
@@ -149,4 +149,4 @@ Configure::write('Email.classname', 'MyEmail');
 モダンな PHP で動く CakePHP 2 のために [pieceofcake2](https://github.com/pieceofcake2) が保守しています。
 元のコードからの変更点は
 [フォーク以降のコミット履歴](https://github.com/pieceofcake2/monolog/compare/73bfc43...2.x)
-を参照してください。
+をご覧ください。
