@@ -145,8 +145,8 @@ Configure::write('Email.classname', 'MyEmail');
 ## 由来
 
 このパッケージは、[jadb/cakephp-monolog](https://github.com/jadb/cakephp-monolog) (Packagist では
-`jadb/cakephp-monolog`、最後のアップストリームのバージョンは 2.0.0) を保守しているフォークで、元々は Jad Bitar によるものです。
-モダンな PHP で動く CakePHP 2 のために [pieceofcake2](https://github.com/pieceofcake2) が保守しています。
+`jadb/cakephp-monolog`、最後のアップストリームのバージョンは 2.0.0) をメンテナンスしているフォークで、元々は Jad Bitar によるものです。
+モダンな PHP で動く CakePHP 2 のために [pieceofcake2](https://github.com/pieceofcake2) がメンテナンスしています。
 元のコードからの変更点は
 [フォーク以降のコミット履歴](https://github.com/pieceofcake2/monolog/compare/73bfc43...2.x)
 をご覧ください。
