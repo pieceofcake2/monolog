@@ -38,13 +38,13 @@ composer require pieceofcake2/monolog
 ## 設定
 
 まず、ログの設定ファイル `config/log.php` (レガシー構成では `app/Config/log.php`) を作成し、
-`config/bootstrap.php` (レガシー構成では `app/Config/bootstrap.php`) の早い段階で読み込みます:
+`config/bootstrap.php` (レガシー構成では `app/Config/bootstrap.php`) の早い段階で読み込みます。
 
 ```php
 require_once CONFIG . 'log.php';
 ```
 
-CakePHP と同じことを Monolog で行う基本的な設定は次のようになります:
+CakePHP と同じことを Monolog で行う基本的な設定は次のようになります。
 
 ```php
 CakePlugin::load('Monolog');
@@ -144,9 +144,10 @@ Configure::write('Email.classname', 'MyEmail');
 
 ## 由来
 
-このパッケージは、[jadb/cakephp-monolog](https://github.com/jadb/cakephp-monolog) (Packagist では
-`jadb/cakephp-monolog`、最後のアップストリームのバージョンは 2.0.0) をメンテナンスしているフォークで、元々は Jad Bitar によるものです。
-モダンな PHP で動く CakePHP 2 のために [pieceofcake2](https://github.com/pieceofcake2) がメンテナンスしています。
-元のコードからの変更点は
+このパッケージは [jadb/cakephp-monolog](https://github.com/jadb/cakephp-monolog) (Packagist では
+`jadb/cakephp-monolog`、アップストリームの最終バージョンは 2.0.0) のメンテナンスされたフォークで、
+元の作者は Jad Bitar です。
+[pieceofcake2](https://github.com/pieceofcake2) が、モダンな PHP で動く CakePHP 2 向けに
+メンテナンスしています。オリジナルからの変更点は
 [フォーク以降のコミット履歴](https://github.com/pieceofcake2/monolog/compare/73bfc43...2.x)
-をご覧ください。
+で確認できます。
